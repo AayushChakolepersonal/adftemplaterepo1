@@ -1,0 +1,465 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name"
+		},
+		"ls_blob": {
+			"type": "string"
+		},
+		"ls_adls": {
+			"type": "string"
+		},
+		"ls_Snowflake": {
+			"type": "string"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline3')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeSink",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "[parameters('ls_blob')]",
+									"type": "LinkedServiceReference"
+								},
+								"path": "stage"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 1
+										},
+										"sink": {
+											"name": "RESOURCECLASS",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 2
+										},
+										"sink": {
+											"name": "RESOURCENAME",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 3
+										},
+										"sink": {
+											"name": "IDNUMBER",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 4
+										},
+										"sink": {
+											"name": "PRIMARROJECTROLE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 5
+										},
+										"sink": {
+											"name": "PLANNEDSTARTDATE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 6
+										},
+										"sink": {
+											"name": "PLANNEDENDDATE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 7
+										},
+										"sink": {
+											"name": "RESOURCEPOOL",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 8
+										},
+										"sink": {
+											"name": "PERSONNELSTATUS",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 9
+										},
+										"sink": {
+											"name": "RESOURCESTATUS",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 10
+										},
+										"sink": {
+											"name": "ALLOCATIONPERCENTAGE",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 11
+										},
+										"sink": {
+											"name": "ONSITEOFFSHORE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 12
+										},
+										"sink": {
+											"name": "ASSIGNMENTID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 13
+										},
+										"sink": {
+											"name": "ASSOCIATEBILLABILITY",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 14
+										},
+										"sink": {
+											"name": "OFFSHOREONSITE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 15
+										},
+										"sink": {
+											"name": "DESCRIPTION",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 16
+										},
+										"sink": {
+											"name": "REASONCODE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"type": "String",
+											"ordinal": 17
+										},
+										"sink": {
+											"name": "DELIVERYROLE",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "3rdsorce",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "3rdsink",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2023-01-11T18:44:14Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/3rdsorce')]",
+				"[concat(variables('factoryId'), '/datasets/3rdsink')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/3rdsorce')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('ls_adls')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "resourcedata.xlsx.txt",
+						"fileSystem": "traildata1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/3rdsink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('ls_Snowflake')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeTable",
+				"schema": [
+					{
+						"name": "RESOURCECLASS",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "RESOURCENAME",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "IDNUMBER",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "PRIMARROJECTROLE",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "PLANNEDSTARTDATE",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "PLANNEDENDDATE",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "RESOURCEPOOL",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "PERSONNELSTATUS",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "RESOURCESTATUS",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "ALLOCATIONPERCENTAGE",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "ONSITEOFFSHORE",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "ASSIGNMENTID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "ASSOCIATEBILLABILITY",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "OFFSHOREONSITE",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "DESCRIPTION",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "REASONCODE",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					},
+					{
+						"name": "DELIVERYROLE",
+						"type": "VARCHAR",
+						"precision": 40,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "AAYUSH",
+					"table": "AAYUSHGITTRIAL2"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
