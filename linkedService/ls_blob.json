@@ -5,7 +5,7 @@
 		"annotations": [],
 		"type": "AzureBlobStorage",
 		"typeProperties": {
-			"sasUri": "https://acstoragejanfeb.blob.core.windows.net/",
+			"sasUri": "https://acstoragejanfeb.blob.core.windows.net/?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2023-02-11T04:36:14Z&st=2023-01-11T20:36:14Z&spr=https&sig=fhohGhp8Yp4BOTMX%2FqrKd6SlbRuxPbAbXigxkvyltgQ%3D",
 			"sasToken": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
